@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Communication Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-robot"></i> Voice Assistant</h1>
+            <p class="subtitle">AI-powered voice communication system with persistent memory</p>
+        </header>
+
+        <main class="main-content">
+            <section class="control-panel">
+                <div class="voice-controls">
+                    <h2><i class="fas fa-microphone"></i> Voice Controls</h2>
+
+                    <div class="control-group">
+                        <label for="voiceSelect">Voice Type</label>
+                        <select id="voiceSelect" class="btn-secondary">
+                            <option value="male">Male Voice</option>
+                            <option value="female">Female Voice</option>
+                            <option value="robotic">Robotic Voice</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="speedControl">Speech Speed</label>
+                        <input type="range" id="speedControl" min="50" max="300" value="175" class="btn-secondary">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                            <span>Slow</span>
+                            <span id="speedValue">Normal</span>
+                            <span>Fast</span>
+                        </div>
+                    </div>
+
+                    <div class="visualizer">
+                        <div class="waveform" id="waveform">
+                            <!-- Waveform bars -->
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="startBtn" class="btn btn-primary">
+                            <i class="fas fa-microphone"></i> Start Listening
+                        </button>
+                        <button id="stopBtn" class="btn btn-secondary" disabled>
+                            <i class="fas fa-stop"></i> Stop
+                        </button>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="saveBtn" class="btn btn-secondary">
+                            <i class="fas fa-save"></i> Save Conversation
+                        </button>
+                        <button id="clearBtn" class="btn btn-secondary">
+                            <i class="fas fa-trash"></i> Clear All
+                        </button>
+                    </div>
+                </div>
+
+                <div class="status-indicator" id="statusIndicator">
+                    <div class="status-dot"></div>
+                    <span class="status-text">Connecting to server...</span>
+                </div>
+            </section>
+
+            <section class="conversation-panel">
+                <div class="conversation-header">
+                    <h2><i class="fas fa-comments"></i> Conversation</h2>
+                    <button id="toggleHistory" class="btn btn-secondary">
+                        <i class="fas fa-history"></i> Show History
+                    </button>
+                </div>
+
+                <div class="conversation-list" id="conversationList">
+                    <div class="message ai-message">
+                        <div class="message-header">
+                            <span class="sender ai-sender">AI Assistant</span>
+                            <span class="timestamp" id="currentTime">Loading...</span>
+                        </div>
+                        <div class="message-content">
+                            Hello! I'm your voice assistant. Click "Start Listening" to begin talking to me. I'll
+                            respond with voice and save our conversation.
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Voice Communication System v1.0 | Conversations are saved to communication.json</p>
+            <p>Use the controls to interact via voice commands</p>
+        </footer>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

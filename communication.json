@@ -1,0 +1,24 @@
+{
+  "conversations": [],
+  "current": [
+    {
+      "id": 1,
+      "role": "assistant",
+      "content": "Welcome to the Voice Communication Assistant! I'm here to help you with voice-based communication. You can speak to me and I'll respond.",
+      "timestamp": "2026-01-14T00:00:00",
+      "metadata": {
+        "type": "welcome",
+        "voice_type": "female"
+      }
+    }
+  ],
+  "last_saved": "2026-01-14T00:00:00",
+  "total_conversations": 0,
+  "total_messages": 1,
+  "settings": {
+    "default_voice": "female",
+    "speech_rate": 175,
+    "auto_save": true,
+    "max_history": 100
+  }
+}
