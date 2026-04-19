@@ -1,10 +1,8 @@
 #!/bin/bash
 
 # Voice Communication Assistant Starting Script
-# Author: System Assistant
-# Date: $(date)
 
-set -e  # Exit on error
+set -e
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -12,8 +10,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-# Configuration
-APP_NAME="Voice Communication Assistant"
+APP_NAME="Voice Communication Assistant with Vulavula Lelapa"
 PYTHON_CMD="python3"
 VENV_DIR="venv"
 REQUIREMENTS_FILE="requirements.txt"
@@ -22,9 +19,9 @@ PORT=5000
 
 print_header() {
     echo -e "${BLUE}"
-    echo "╔══════════════════════════════════════════════════════════╗"
-    echo "║                        $APP_NAME                         ║"
-    echo "╚══════════════════════════════════════════════════════════╝"
+    echo "|==============================================================|"
+    echo "|                    $APP_NAME                                 |"
+    echo "|==============================================================|"
     echo -e "${NC}"
 }
 
@@ -83,7 +80,7 @@ setup_environment() {
         pip install -r "$REQUIREMENTS_FILE"
     else
         print_warning "requirements.txt not found, installing basic dependencies..."
-        pip install flask flask-socketio flask-cors speechrecognition pyttsx3 pyaudio python-dotenv
+        pip install flask flask-socketio flask-cors speechrecognition pyttsx3 pyaudio python-dotenv requests
     fi
 }
 
@@ -107,46 +104,49 @@ create_missing_files() {
     
     if [ ! -f "communication.json" ]; then
         echo '{
-  "conversations": [],
-  "current": [
-    {
-      "id": 1,
-      "role": "assistant",
-      "content": "System initialized. Ready for voice communication.",
-      "timestamp": "'$(date -Iseconds)'",
-      "metadata": {
-        "type": "system",
-        "voice_type": "female"
-      }
-    }
-  ],
-  "last_saved": "'$(date -Iseconds)'",
-  "total_conversations": 0,
-  "total_messages": 1
+  "conversation": [],
+  "last_updated": "'$(date -Iseconds)'",
+  "total_messages": 0,
+  "vulavula_enabled": true
 }' > communication.json
         print_status "Created communication.json"
     fi
     
     if [ ! -f ".env" ]; then
-        echo "# Voice Assistant Configuration
+        cat > .env << EOF
+# Vulavula Lelapa API Configuration
+VULAVULA_API_KEY=your-api-key-here
+
+# Application Configuration
 FLASK_ENV=development
 FLASK_DEBUG=1
-SECRET_KEY=$(openssl rand -hex 32)
+PORT=5000
+HOST=0.0.0.0
+
+# Audio Configuration
 AUDIO_SAMPLE_RATE=16000
-MAX_CONVERSATION_LENGTH=100
-AUTO_SAVE_INTERVAL=60" > .env
+AUDIO_CHANNELS=1
+AUDIO_CHUNK_SIZE=1024
+
+# Vulavula Configuration
+VULAVULA_API_URL=https://api.lelapa.ai
+VULAVULA_LANG_CODE=eng
+VULAVULA_ENABLE_DIARISE=false
+VULAVULA_DETECT_MUSIC=false
+EOF
         print_status "Created .env configuration file"
+        print_warning "Please add your Vulavula API key to .env file"
     fi
 }
 
 start_application() {
     print_status "Starting $APP_NAME..."
     echo -e "${YELLOW}"
-    echo "╔══════════════════════════════════════════════════════════╗"
-    echo "║   Application Starting on http://localhost:$PORT         ║"
-    echo "║                                                          ║"
-    echo "║  Press Ctrl+C to stop the application                    ║"
-    echo "╚══════════════════════════════════════════════════════════╝"
+    echo "|==============================================================|"
+    echo "|   Application Starting on http://localhost:$PORT             |"
+    echo "|                                                              |"
+    echo "|  Press Ctrl+C to stop the application                        |"
+    echo "|==============================================================|"
     echo -e "${NC}"
     
     $PYTHON_CMD "$MAIN_SCRIPT"
