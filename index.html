@@ -4,104 +4,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Communication Assistant</title>
+    <title>Voice Communication Assistant | Vulavula Lelapa STT</title>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-brands/css/uicons-brands.css">
+
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-    <div class="container">
-        <header class="header">
-            <h1><i class="fas fa-robot"></i> Voice Assistant</h1>
-            <p class="subtitle">AI-powered voice communication system with persistent memory</p>
+    <div class="container py-4">
+        <!-- Header -->
+        <header class="text-center mb-5">
+            <div class="header-badge mx-auto mb-3">
+                <i class="fi fi-rr-microphone"></i>
+            </div>
+            <h1 class="display-4 fw-bold">
+                <i class="fi fi-rr-robot me-2"></i>Voice Assistant
+            </h1>
+            <p class="lead text-secondary">AI-powered voice communication with Vulavula Lelapa STT & Translation</p>
+            <div class="status-badge d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill"
+                id="statusIndicator">
+                <span class="status-dot"></span>
+                <span class="status-text">Connecting...</span>
+            </div>
         </header>
 
-        <main class="main-content">
-            <section class="control-panel">
-                <div class="voice-controls">
-                    <h2><i class="fas fa-microphone"></i> Voice Controls</h2>
+        <!-- Main -->
+        <div class="row g-4">
+            <!-- Control Panel -->
+            <div class="col-lg-5 col-md-12">
+                <div class="control-card p-4 rounded-4">
+                    <h3 class="mb-4">
+                        <i class="fi fi-rr-control-panel me-2"></i>Voice Controls
+                    </h3>
 
-                    <div class="control-group">
-                        <label for="voiceSelect">Voice Type</label>
-                        <select id="voiceSelect" class="btn-secondary">
-                            <option value="male">Male Voice</option>
+                    <!-- Voice Type -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fi fi-rr-voice me-1"></i>Voice Type
+                        </label>
+                        <select id="voiceSelect" class="form-select bg-dark text-light border-secondary">
                             <option value="female">Female Voice</option>
+                            <option value="male">Male Voice</option>
                             <option value="robotic">Robotic Voice</option>
                         </select>
                     </div>
 
-                    <div class="control-group">
-                        <label for="speedControl">Speech Speed</label>
-                        <input type="range" id="speedControl" min="50" max="300" value="175" class="btn-secondary">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                    <!-- Language Selection for STT -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fi fi-rr-language me-1"></i>STT Language
+                        </label>
+                        <select id="languageSelect" class="form-select bg-dark text-light border-secondary">
+                            <option value="eng">English (South African)</option>
+                            <option value="zul">isiZulu</option>
+                            <option value="sot">Sesotho</option>
+                            <option value="afr">Afrikaans</option>
+                            <option value="fra">African French</option>
+                            <option value="cs-zul">Code-switched isiZulu</option>
+                        </select>
+                    </div>
+
+                    <!-- Translation Target -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fi fi-rr-exchange me-1"></i>Translate To (Optional)
+                        </label>
+                        <select id="translateSelect" class="form-select bg-dark text-light border-secondary">
+                            <option value="">No Translation</option>
+                            <option value="english">English</option>
+                            <option value="zulu">isiZulu</option>
+                            <option value="xhosa">isiXhosa</option>
+                            <option value="afrikaans">Afrikaans</option>
+                            <option value="sesotho">Sesotho</option>
+                            <option value="tswana">Setswana</option>
+                            <option value="swahili">Kiswahili</option>
+                        </select>
+                    </div>
+
+                    <!-- Speech Speed Control -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fi fi-rr-speedometer me-1"></i>Speech Speed
+                        </label>
+                        <input type="range" id="speedControl" min="50" max="300" value="175" class="form-range">
+                        <div class="d-flex justify-content-between mt-1 small text-secondary">
                             <span>Slow</span>
                             <span id="speedValue">Normal</span>
                             <span>Fast</span>
                         </div>
                     </div>
 
-                    <div class="visualizer">
-                        <div class="waveform" id="waveform">
-                            <!-- Waveform bars -->
+                    <!-- Audio Visualizer -->
+                    <div class="visualizer mb-4 p-3 rounded-3">
+                        <div class="waveform" id="waveform"></div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex gap-3 mb-4">
+                        <button id="startBtn" class="btn btn-primary flex-grow-1 py-3">
+                            <i class="fi fi-rr-microphone me-2"></i>Start Listening
+                        </button>
+                        <button id="stopBtn" class="btn btn-secondary flex-grow-1 py-3" disabled>
+                            <i class="fi fi-rr-stop me-2"></i>Stop
+                        </button>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <button id="saveBtn" class="btn btn-outline-info flex-grow-1 py-2">
+                            <i class="fi fi-rr-save me-1"></i>Save
+                        </button>
+                        <button id="clearBtn" class="btn btn-outline-warning flex-grow-1 py-2">
+                            <i class="fi fi-rr-trash me-1"></i>Clear
+                        </button>
+                        <button id="toggleHistory" class="btn btn-outline-secondary flex-grow-1 py-2">
+                            <i class="fi fi-rr-history me-1"></i>History
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conversation Panel -->
+            <div class="col-lg-7 col-md-12">
+                <div class="conversation-card p-4 rounded-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="mb-0">
+                            <i class="fi fi-rr-comments me-2"></i>Conversation
+                        </h3>
+                        <span class="badge bg-primary px-3 py-2">
+                            <i class="fi fi-rr-clock me-1"></i>
+                            <span id="currentTime">--:-- --</span>
+                        </span>
+                    </div>
+
+                    <div class="conversation-list" id="conversationList">
+                        <div class="message ai-message">
+                            <div class="message-header">
+                                <span class="sender ai-sender">
+                                    <i class="fi fi-rr-robot me-1"></i>AI Assistant
+                                </span>
+                                <span class="timestamp">Just now</span>
+                            </div>
+                            <div class="message-content">
+                                Hello! I'm your voice assistant powered by Vulavula Lelapa STT.
+                                Click "Start Listening" to begin. I support English, isiZulu, Sesotho,
+                                Afrikaans, and can translate between languages!
+                            </div>
                         </div>
                     </div>
-
-                    <div class="button-group">
-                        <button id="startBtn" class="btn btn-primary">
-                            <i class="fas fa-microphone"></i> Start Listening
-                        </button>
-                        <button id="stopBtn" class="btn btn-secondary" disabled>
-                            <i class="fas fa-stop"></i> Stop
-                        </button>
-                    </div>
-
-                    <div class="button-group">
-                        <button id="saveBtn" class="btn btn-secondary">
-                            <i class="fas fa-save"></i> Save Conversation
-                        </button>
-                        <button id="clearBtn" class="btn btn-secondary">
-                            <i class="fas fa-trash"></i> Clear All
-                        </button>
-                    </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="status-indicator" id="statusIndicator">
-                    <div class="status-dot"></div>
-                    <span class="status-text">Connecting to server...</span>
-                </div>
-            </section>
-
-            <section class="conversation-panel">
-                <div class="conversation-header">
-                    <h2><i class="fas fa-comments"></i> Conversation</h2>
-                    <button id="toggleHistory" class="btn btn-secondary">
-                        <i class="fas fa-history"></i> Show History
-                    </button>
-                </div>
-
-                <div class="conversation-list" id="conversationList">
-                    <div class="message ai-message">
-                        <div class="message-header">
-                            <span class="sender ai-sender">AI Assistant</span>
-                            <span class="timestamp" id="currentTime">Loading...</span>
-                        </div>
-                        <div class="message-content">
-                            Hello! I'm your voice assistant. Click "Start Listening" to begin talking to me. I'll
-                            respond with voice and save our conversation.
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer class="footer">
-            <p>Voice Communication System v1.0 | Conversations are saved to communication.json</p>
-            <p>Use the controls to interact via voice commands</p>
+        <!-- Footer -->
+        <footer class="text-center mt-5 pt-4 border-top border-secondary">
+            <p class="text-secondary small">
+                <i class="fi fi-rr-microphone-alt me-1"></i> Powered by Vulavula Lelapa STT & Translation API
+                | <i class="fi fi-rr-database me-1"></i> Conversations saved to communication.json
+            </p>
         </footer>
     </div>
 
-    <div id="notification" class="notification"></div>
+    <!-- Toast -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="notification" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive"
+            aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 

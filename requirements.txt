@@ -1,7 +1,14 @@
 flask
 flask-cors
+flask-socketio
+python-dotenv
+requests
 speechrecognition
 pyttsx3
 pyaudio
-python-dotenv
-flask-socketio
+soundfile
+pydub
+python-engineio
+python-socketio
+numpy
+eventlet

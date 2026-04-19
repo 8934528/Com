@@ -4,7 +4,7 @@ A sophisticated voice-based communication system with persistent memory, real-ti
 
 ## Features
 
-- **Voice Recognition**: Convert speech to text using Google's speech recognition
+- **Voice Recognition**: Convert speech to text using speech recognition
 - **Voice Synthesis**: Convert text to speech with multiple voice options
 - **Real-time Communication**: WebSocket-based bidirectional communication
 - **Conversation Memory**: Save conversations to JSON file
@@ -13,19 +13,21 @@ A sophisticated voice-based communication system with persistent memory, real-ti
 
 ## Project Structure
 
-      Com/
-        |
-        ├── assistant.c
-        ├── assistant.cpp
-        ├── com.py
-        ├── communication.json
-        ├── index.html
-        ├── README.md
-        ├── requirements.txt
-        ├── run.bat
-        ├── run.sh
-        ├── script.js
-        └── style.css
+    Com/
+    ├── __init__.py
+    ├── .gitignore
+    ├── .env
+    ├── assistant.c
+    ├── assistant.cpp
+    ├── com.py
+    ├── communication.json
+    ├── index.html
+    ├── README.md
+    ├── requirements.txt
+    ├── run.bat
+    ├── run.sh
+    ├── script.js
+    └── style.css
 
 ## Installation
 
@@ -98,7 +100,6 @@ A sophisticated voice-based communication system with persistent memory, real-ti
 | /api/speak            | POST   | Text-to-speech            |
 | /api/health           | GET    | Health check              |
 
-
 ## WebSocket Events
 
 | Event              | Direction             | Description                   |
@@ -108,5 +109,3 @@ A sophisticated voice-based communication system with persistent memory, real-ti
 | audio_response     | Server → Client       | Send audio response           |
 | save_conversation  | Both                  | Save conversation             |
 | load_history       | Client → Server       | Load conversation history     |
-
-

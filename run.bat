@@ -42,12 +42,24 @@ if %errorlevel% neq 0 (
 echo [INFO] Upgrading pip...
 python -m pip install --upgrade pip
 
-if exist "requirements.txt" (
-    echo [INFO] Installing dependencies from requirements.txt...
-    pip install -r requirements.txt
-) else (
-    echo [INFO] Installing basic dependencies...
-    pip install flask flask-socketio flask-cors speechrecognition pyttsx3 pyaudio python-dotenv
+echo [INFO] Installing dependencies...
+pip install flask flask-socketio flask-cors pyttsx3 soundfile pydub numpy
+
+echo [INFO] Installing PyAudio (might need manual installation)...
+pip install pipwin
+pipwin install pyaudio
+
+if not exist "requirements.txt" (
+    echo [INFO] Creating requirements.txt...
+    (
+        echo Flask==2.3.3
+        echo Flask-SocketIO==5.3.4
+        echo Flask-CORS==4.0.0
+        echo pyttsx3==2.90
+        echo soundfile==0.12.1
+        echo pydub==0.25.1
+        echo numpy==1.24.3
+    ) > requirements.txt
 )
 
 if not exist "communication.json" (
@@ -59,7 +71,7 @@ if not exist "communication.json" (
         echo     {
         echo       "id": 1,
         echo       "role": "assistant",
-        echo       "content": "Windows system initialized. Ready for voice communication.",
+        echo       "content": "Windows system initialized with improved audio processing.",
         echo       "timestamp": "%date% %time%",
         echo       "metadata": {
         echo         "type": "system",
@@ -72,29 +84,6 @@ if not exist "communication.json" (
         echo   "total_messages": 1
         echo }
     ) > communication.json
-)
-
-if not exist ".env" (
-    echo [INFO] Creating .env file...
-    (
-        echo # Voice Assistant Configuration
-        echo FLASK_ENV=development
-        echo FLASK_DEBUG=1
-        echo SECRET_KEY=windows_secret_key_change_in_production
-        echo AUDIO_SAMPLE_RATE=16000
-        echo MAX_CONVERSATION_LENGTH=100
-        echo AUTO_SAVE_INTERVAL=60
-    ) > .env
-)
-
-echo [INFO] Checking audio system...
-python -c "import pyaudio" 2>nul
-if %errorlevel% neq 0 (
-    echo [WARNING] PyAudio may have issues on Windows.
-    echo You may need to install it manually:
-    echo pip install pipwin
-    echo pipwin install pyaudio
-    echo.
 )
 
 echo.

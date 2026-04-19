@@ -1,0 +1,72 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# Virtual Environment
+venv/
+.venv/
+venv.bak/
+.env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Project specific
+communication.json
+communication_c.json
+communication_cpp.json
+*.log
+*.wav
+static/audio/
+temp_*.wav
+audio_chunks/
+
+# Environment variables
+.env.local
+.env.*.local
+
+# C/C++ compiled files
+*.o
+*.exe
+*.out
+assistant
+assistant.exe
+assistant_c
+assistant_cpp
+
+# Audio files
+*.mp3
+*.wav
+*.ogg
+*.flac
+*.aac
+
+# Database
+*.db
+*.sqlite
+
+# Logs
+logs/
+*.log
+
+# OS
+Thumbs.db
+Desktop.ini
