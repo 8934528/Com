@@ -56,7 +56,6 @@ class Message:
 
 
 class VulavulaSTT:
-    """Vulavula Lelapa Speech-to-Text integration"""
     
     def __init__(self, api_key: str):
         self.api_key = api_key
@@ -64,7 +63,7 @@ class VulavulaSTT:
         
     def transcribe(self, audio_bytes: bytes, lang_code: str = None) -> Dict:
         """
-        Transcribe audio using Vulavula Lelapa API
+        Transcribe audio using API
         
         Args:
             audio_bytes: Audio file bytes (WAV format recommended)
@@ -74,7 +73,7 @@ class VulavulaSTT:
             Dict containing transcription result
         """
         if not self.api_key:
-            return {'error': 'Vulavula API key not configured', 'text': ''}
+            return {'error': 'API key not configured', 'text': ''}
         
         try:
             # audio must be in correct format
@@ -140,7 +139,6 @@ class VulavulaSTT:
 
 
 class VulavulaTranslator:
-    """Vulavula Lelapa Translation integration"""
     
     def __init__(self, api_key: str):
         self.api_key = api_key
@@ -148,7 +146,7 @@ class VulavulaTranslator:
     
     def translate(self, text: str, source_lang: str, target_lang: str) -> Dict:
         """
-        Translate text using Vulavula API
+        Translate text using API
         
         Args:
             text: Text to translate
@@ -159,7 +157,7 @@ class VulavulaTranslator:
             Dict containing translation result
         """
         if not self.api_key:
-            return {'error': 'Vulavula API key not configured', 'translated_text': text}
+            return {'error': 'API key not configured', 'translated_text': text}
         
         try:
             headers = {
@@ -289,7 +287,7 @@ class VoiceAssistant:
         
         @self.socketio.on('audio')
         def handle_audio(data):
-            """Handle incoming audio data with Vulavula STT"""
+            """Handle incoming audio data with STT"""
             try:
                 audio_bytes = base64.b64decode(data['audio'])
                 voice_type = data.get('voice_type', 'female')
@@ -477,7 +475,7 @@ class VoiceAssistant:
             return "I'm doing great, thank you for asking! How can I help you?"
         
         elif any(word in text_lower for word in ['what is your name', 'who are you']):
-            return "I'm your Voice Communication Assistant powered by Vulavula Lelapa. You can call me Com!"
+            return "I'm your Voice Communication Assistant. You can call me Com!"
         
         elif any(word in text_lower for word in ['time', 'current time']):
             return f"The current time is {datetime.now().strftime('%I:%M %p')}"
@@ -577,11 +575,11 @@ class VoiceAssistant:
     
     def run(self):
         print("=" * 60)
-        print("Voice Communication Assistant with Vulavula Lelapa STT")
+        print("Voice Communication Assistant")
         print("=" * 60)
         print(f"Server: http://{CONFIG['host']}:{CONFIG['port']}")
         print(f"Data file: {CONFIG['data_file']}")
-        print(f"Vulavula API: {'Configured' if VULAVULA_API_KEY else 'Not configured'}")
+        print(f"API: {'Configured' if VULAVULA_API_KEY else 'Not configured'}")
         print(f"STT Provider: {'Vulavula' if self.stt_client else 'Fallback (Google)'}")
         print("Press Ctrl+C to stop")
         print("=" * 60)

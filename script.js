@@ -236,7 +236,7 @@ class VoiceAssistant {
 
       case "connected":
         if (data.vulavula_available) {
-          this.showNotification("Vulavula STT is available!", "success");
+          this.showNotification("STT is available!", "success");
         }
         break;
     }

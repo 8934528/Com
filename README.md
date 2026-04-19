@@ -1,6 +1,6 @@
-# Voice Communication Assistant with Vulavula Lelapa STT
+# Voice Communication Assistant
 
-An AI-powered voice communication system with persistent memory, featuring Vulavula Lelapa Speech-to-Text and Translation capabilities for South African languages.
+An AI-powered voice communication system with persistent memory, featuring Speech-to-Text and Translation capabilities for South African languages.
 
 ---
 
