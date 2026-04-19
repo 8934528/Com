@@ -93,10 +93,13 @@ Add to `.env`:
 ## Project Structure
 
         Com/
-        ├── com.py              # Main Flask application with Vulavula integration
-        ├── index.html          # Frontend UI with Bootstrap
-        ├── script.js           # Client-side JavaScript
-        ├── style.css           # Custom styling (27% animation, 5% hover)
+        ├── static/
+        │   ├── style.css       # Custom styling
+        │   ├── script.js       # Client-side JavaScript 
+        |   └── audio/
+        ├── templates/
+        |   └── index.html      # Frontend UI
+        ├── com.py              # Main Flask application
         ├── requirements.txt    # Python dependencies
         ├── run.sh              # Linux/Mac launcher
         ├── run.bat             # Windows launcher
