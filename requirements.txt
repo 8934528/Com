@@ -6,6 +6,7 @@ requests
 speechrecognition
 pyttsx3
 pyaudio
+pipwin
 soundfile
 pydub
 python-engineio
