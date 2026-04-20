@@ -76,36 +76,29 @@ An AI-powered voice communication system with persistent memory, featuring Speec
 
 Navigate to `http://localhost:5000`
 
-## API Configuration
-
-### Vulavula Lelapa API
-
-Get your API key from **Vulavula Lelapa**
-
-Add to `.env`:
-
-        text
-        VULAVULA_API_KEY=your-api-key-here
-        VULAVULA_LANG_CODE=eng
-
 ---
 
 ## Project Structure
 
-        Com/
-        ├── static/
-        │   ├── style.css       # Custom styling
-        │   ├── script.js       # Client-side JavaScript 
-        |   └── audio/
-        ├── templates/
-        |   └── index.html      # Frontend UI
-        ├── com.py              # Main Flask application
-        ├── requirements.txt    # Python dependencies
-        ├── run.sh              # Linux/Mac launcher
-        ├── run.bat             # Windows launcher
-        ├── .env                # Environment variables
-        ├── .gitignore          # Git ignore file
-        └── communication.json  # Conversation storage
+                Com/
+                ├── static/
+                │   ├── style.css               # Custom styling
+                │   ├── script.js               # Client-side JavaScript
+                │   ├── settings.js             # Settings panel JavaScript
+                │   └── audio/                  # Audio storage directory
+                ├── templates/
+                │   ├── index.html              # Main Frontend UI
+                │   └── settings.html           # Settings Modal Template
+                ├── com.py                      # Main Flask application
+                ├── requirements.txt            # Python dependencies
+                ├── run.sh                      # Linux/Mac launcher
+                ├── run.bat                     # Windows launcher
+                ├── .env                        # Environment variables
+                ├── .gitignore                  # Git ignore file
+                ├── communication.json          # Conversation storage
+                ├── settings.json               # User settings storage
+                └── cache/                      # TTS cache directory
+                    └── tts_cache/              # Cached audio files
 
 ---
 

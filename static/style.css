@@ -89,6 +89,122 @@ body {
     overflow: hidden;
 }
 
+/* Settings Icon Button */
+.settings-icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-medium);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.3rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.settings-icon-btn:hover {
+    opacity: 0.7;
+    transform: rotate(15deg);
+}
+
+/* Settings Modal Styles */
+.settings-container {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 0.5rem;
+}
+
+.settings-section {
+    background: var(--bg-medium);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.settings-section h4 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-medium);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.settings-section .form-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.25rem;
+}
+
+.settings-section .form-check-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.settings-section .form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.settings-section .form-control,
+.settings-section .form-select {
+    background: var(--bg-light);
+    border: 1px solid var(--border-color);
+    color: var(--text-dark);
+    font-size: 0.8rem;
+}
+
+.settings-section .form-control:focus,
+.settings-section .form-select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: none;
+}
+
+.settings-section textarea {
+    resize: vertical;
+}
+
+.settings-section small {
+    font-size: 0.65rem;
+    color: var(--text-dark);
+    opacity: 0.7;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.settings-section input[type="range"] {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.settings-section input[type="range"]::-webkit-slider-thumb {
+    background: var(--primary-color);
+}
+
+.modal-footer .btn-primary {
+    background: var(--primary-color);
+    border: none;
+}
+
+.modal-footer .btn-primary:hover {
+    opacity: 0.85;
+}
+
+.modal-footer .btn-secondary {
+    background: var(--text-medium);
+    border: none;
+}
+
+.modal-footer .btn-secondary:hover {
+    opacity: 0.85;
+}
+
 /* Control Panel */
 .control-panel {
     background: var(--bg-medium);

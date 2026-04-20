@@ -20,6 +20,7 @@ venv/
 .venv/
 venv.bak/
 .env/
+.env
 
 # IDE
 .vscode/

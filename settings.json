@@ -1,0 +1,33 @@
+{
+  "tts": {
+    "enable_ssml": true,
+    "enable_neural_tts": false,
+    "default_speech_rate": 1.0,
+    "default_pitch": 1.0,
+    "default_volume": 1.0,
+    "voice_cloning_enabled": false,
+    "custom_voice_id": "",
+    "emotion_style": "neutral",
+    "enable_emotion_detection": false
+  },
+  "stt": {
+    "enable_noise_reduction": true,
+    "enable_real_time_lang_detection": true,
+    "enable_speaker_diarization": false,
+    "model_adaptation_enabled": false,
+    "custom_vocabulary": [],
+    "technical_jargon_enabled": false
+  },
+  "conversation": {
+    "enable_context_awareness": true,
+    "max_context_messages": 10,
+    "conversation_mode_enabled": false,
+    "cache_enabled": true,
+    "cache_ttl": 86400
+  },
+  "privacy": {
+    "enable_audio_logging": false,
+    "auto_delete_audio": true,
+    "retention_days": 7
+  }
+}

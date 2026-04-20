@@ -328,6 +328,30 @@ class VoiceAssistant {
     this.addMessage("user", text);
 
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      // Check if we should use advanced TTS
+      const settings = window.settingsManager?.settings || {};
+      if (settings.tts?.enable_neural_tts) {
+        this.sendAdvancedTTSRequest(text, voiceType);
+      } else {
+        this.socket.send(
+          JSON.stringify({
+            type: "text_message",
+            text: text,
+            voiceType: voiceType,
+            timestamp: new Date().toISOString(),
+          }),
+        );
+      }
+    } else {
+      this.speakText(text);
+    }
+
+    input.value = "";
+    this.showNotification("Speaking text...", "success");
+  }
+
+  sendAdvancedTTSRequest(text, voiceType) {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(
         JSON.stringify({
           type: "text_message",
@@ -336,12 +360,7 @@ class VoiceAssistant {
           timestamp: new Date().toISOString(),
         }),
       );
-    } else {
-      this.speakText(text);
     }
-
-    input.value = "";
-    this.showNotification("Speaking text...", "success");
   }
 
   async startRecording() {
@@ -398,6 +417,77 @@ class VoiceAssistant {
         "error",
       );
     }
+  }
+
+  async synthesizeSpeechWithSettings(text, voiceType = "female") {
+    const settings = window.settingsManager?.settings || {};
+    const ttsSettings = settings.tts || {};
+
+    let ssmlText = text;
+
+    if (ttsSettings.enable_ssml) {
+      ssmlText = this.buildSSML(text, {
+        rate: ttsSettings.default_speech_rate,
+        pitch: ttsSettings.default_pitch,
+        volume: ttsSettings.default_volume,
+        emotion: ttsSettings.emotion_style,
+      });
+    }
+
+    if (
+      ttsSettings.enable_emotion_control &&
+      ttsSettings.emotion_style !== "neutral"
+    ) {
+      ssmlText = this.addEmotionToSSML(ssmlText, ttsSettings.emotion_style);
+    }
+
+    return this.synthesizeSpeech(ssmlText, voiceType, true);
+  }
+
+  buildSSML(text, options) {
+    let ssml = `<speak>`;
+
+    if (options.rate !== 1.0) {
+      ssml += `<prosody rate="${options.rate}">`;
+    }
+    if (options.pitch !== 1.0) {
+      ssml = ssml.replace(
+        "<speak>",
+        `<speak><prosody pitch="${options.pitch}">`,
+      );
+    }
+    if (options.volume !== 1.0) {
+      ssml = ssml.replace(
+        "<speak>",
+        `<speak><prosody volume="${options.volume}">`,
+      );
+    }
+
+    ssml += text;
+
+    // Close prosody tags
+    if (options.rate !== 1.0) ssml += `</prosody>`;
+    if (options.pitch !== 1.0) ssml += `</prosody>`;
+    if (options.volume !== 1.0) ssml += `</prosody>`;
+
+    ssml += `</speak>`;
+    return ssml;
+  }
+
+  addEmotionToSSML(text, emotion) {
+    const emotionMap = {
+      happy: '<prosody pitch="+10%" rate="+5%">',
+      sad: '<prosody pitch="-10%" rate="-5%">',
+      excited: '<prosody pitch="+15%" rate="+10%">',
+      calm: '<prosody pitch="-5%" rate="-10%">',
+      whisper: '<prosody volume="soft">',
+      empathetic: '<prosody pitch="-5%" rate="-5%">',
+    };
+
+    const closingTag = "</prosody>";
+    const openingTag = emotionMap[emotion] || "";
+
+    return openingTag + text + closingTag;
   }
 
   stopRecording() {
@@ -529,8 +619,20 @@ class VoiceAssistant {
 
   speakText(text) {
     if ("speechSynthesis" in window && this.isPoweredOn) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = document.getElementById("speedControl").value / 175;
+      const settings = window.settingsManager?.settings || {};
+      const ttsSettings = settings.tts || {};
+
+      let utteranceText = text;
+
+      utteranceText = utteranceText.replace(/<[^>]*>/g, "");
+
+      const utterance = new SpeechSynthesisUtterance(utteranceText);
+      utterance.rate =
+        ttsSettings.default_speech_rate ||
+        document.getElementById("speedControl").value / 175;
+      utterance.pitch = ttsSettings.default_pitch || 1.0;
+      utterance.volume = ttsSettings.default_volume || 1.0;
+
       utterance.onstart = () => {
         this.isSpeaking = true;
         this.updateButtonStates();
@@ -539,6 +641,7 @@ class VoiceAssistant {
         this.isSpeaking = false;
         this.updateButtonStates();
       };
+
       speechSynthesis.speak(utterance);
     }
   }

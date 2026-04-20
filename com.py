@@ -264,29 +264,88 @@ class VoiceAssistant:
             'northern_sotho': 'nso_Latn'
         }
         
-    def setup_routes(self):
-        @self.app.route('/')
-        def index():
-            return render_template('index.html')
+
+
+
         
-        @self.app.route('/api/conversation', methods=['GET'])
-        def get_conversation():
-            return jsonify(self.conversation)
-        
-        @self.app.route('/api/health', methods=['GET'])
-        def health_check():
-            return jsonify({
-                'status': 'healthy',
-                'timestamp': datetime.now().isoformat(),
-                'conversation_count': len(self.conversation),
-                'vulavula_available': self.stt_client is not None,
-                'vulavula_api_key_configured': bool(VULAVULA_API_KEY)
-            })
-        
-        @self.app.route('/api/languages', methods=['GET'])
-        def get_languages():
-            return jsonify(list(self.lang_map.keys()))
+   def setup_routes(self):
+    @self.app.route('/')
+    def index():
+        return render_template('index.html')
     
+    @self.app.route('/api/conversation', methods=['GET'])
+    def get_conversation():
+        return jsonify(self.conversation)
+    
+    @self.app.route('/api/health', methods=['GET'])
+    def health_check():
+        return jsonify({
+            'status': 'healthy',
+            'timestamp': datetime.now().isoformat(),
+            'conversation_count': len(self.conversation),
+            'vulavula_available': self.stt_client is not None,
+            'vulavula_api_key_configured': bool(VULAVULA_API_KEY)
+        })
+    
+    @self.app.route('/api/languages', methods=['GET'])
+    def get_languages():
+        return jsonify(list(self.lang_map.keys()))
+    
+    @self.app.route('/api/settings', methods=['GET', 'POST'])
+    def handle_settings():
+        settings_file = os.getenv('SETTINGS_FILE', 'settings.json')
+        
+        if request.method == 'POST':
+            try:
+                settings_data = request.json
+                with open(settings_file, 'w') as f:
+                    json.dump(settings_data, f, indent=2)
+                return jsonify({'status': 'success', 'message': 'Settings saved'})
+            except Exception as e:
+                return jsonify({'status': 'error', 'message': str(e)}), 500
+        else:
+            try:
+                if os.path.exists(settings_file):
+                    with open(settings_file, 'r') as f:
+                        settings_data = json.load(f)
+                    return jsonify(settings_data)
+                else:
+                    return jsonify({
+                        'tts': {
+                            'enable_ssml': True,
+                            'enable_neural_tts': False,
+                            'enable_voice_cloning': False,
+                            'enable_emotion_control': False,
+                            'default_speech_rate': 1.0,
+                            'default_pitch': 1.0,
+                            'default_volume': 1.0,
+                            'emotion_style': 'neutral'
+                        },
+                        'stt': {
+                            'enable_noise_reduction': True,
+                            'enable_real_time_lang_detection': True,
+                            'enable_speaker_diarization': False,
+                            'enable_model_adaptation': False,
+                            'custom_vocabulary': []
+                        },
+                        'conversation': {
+                            'enable_context_awareness': True,
+                            'enable_conversation_mode': False,
+                            'enable_cache_management': True,
+                            'max_context_messages': 10,
+                            'cache_ttl': 86400
+                        },
+                        'privacy': {
+                            'enable_audio_logging': False,
+                            'auto_delete_audio': True,
+                            'retention_days': 7
+                        }
+                    })
+            except Exception as e:
+                return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
+
     def setup_socket_events(self):
         @self.socketio.on('connect')
         def handle_connect():
