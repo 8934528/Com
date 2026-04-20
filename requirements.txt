@@ -13,3 +13,4 @@ python-engineio
 python-socketio
 numpy
 eventlet
+eventlet-websocket

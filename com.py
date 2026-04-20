@@ -11,7 +11,7 @@ from dataclasses import dataclass, asdict
 import wave
 import io
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -27,7 +27,7 @@ load_dotenv()
 CONFIG = {
     'host': os.getenv('HOST', '0.0.0.0'),
     'port': int(os.getenv('PORT', 5000)),
-    'debug': os.getenv('FLASK_DEBUG', '1') == '1',
+    'debug': os.getenv('FLASK_DEBUG', '0') == '1',
     'data_file': os.getenv('DATA_FILE', 'communication.json'),
     'audio_format': pyaudio.paInt16,
     'channels': int(os.getenv('AUDIO_CHANNELS', 1)),
@@ -110,7 +110,7 @@ class VulavulaSTT:
                 headers=headers,
                 files=files,
                 params=params,
-                timeout=180  # 3 minute timeout for long audio
+                timeout=180
             )
             
             if response.status_code == 200:
@@ -203,9 +203,21 @@ class VoiceAssistant:
     """Main voice assistant class handling speech recognition and synthesis"""
     
     def __init__(self):
-        self.app = Flask(__name__)
+        self.app = Flask(__name__, 
+                        template_folder='templates',
+                        static_folder='static')
+        self.app.config['SECRET_KEY'] = os.urandom(24)
+        self.app.config['DEBUG'] = False
+        
         CORS(self.app)
-        self.socketio = SocketIO(self.app, cors_allowed_origins="*", async_mode='threading')
+        
+        self.socketio = SocketIO(
+            self.app, 
+            cors_allowed_origins="*",
+            async_mode='threading',
+            logger=True,
+            engineio_logger=True
+        )
         
         self.stt_client = VulavulaSTT(VULAVULA_API_KEY) if VULAVULA_API_KEY else None
         self.translator = VulavulaTranslator(VULAVULA_API_KEY) if VULAVULA_API_KEY else None
@@ -285,24 +297,26 @@ class VoiceAssistant:
                 'api_configured': bool(VULAVULA_API_KEY)
             })
         
+        @self.socketio.on('disconnect')
+        def handle_disconnect():
+            print(f"Client disconnected: {request.sid}")
+        
         @self.socketio.on('audio')
         def handle_audio(data):
             """Handle incoming audio data with STT"""
             try:
                 audio_bytes = base64.b64decode(data['audio'])
-                voice_type = data.get('voice_type', 'female')
+                voice_type = data.get('voiceType', 'female')
                 lang_code = data.get('lang_code', VULAVULA_LANG_CODE)
                 translate_to = data.get('translate_to', None)
                 
                 recognized_text = ""
-                confidence = 0
                 
                 # Try Vulavula STT first
                 if self.stt_client:
                     result = self.stt_client.transcribe(audio_bytes, lang_code)
                     if result.get('success'):
                         recognized_text = result.get('text', '')
-                        confidence = 0.9
                         print(f"Vulavula recognized: {recognized_text}")
                     else:
                         print(f"Vulavula error: {result.get('error')}")
@@ -319,7 +333,7 @@ class VoiceAssistant:
                 # Translate if requested
                 original_text = recognized_text
                 if translate_to and translate_to in self.lang_map and self.translator:
-                    source_lang = 'eng_Latn'  # Assume English as source
+                    source_lang = 'eng_Latn'
                     target_lang = self.lang_map[translate_to]
                     translation = self.translator.translate(recognized_text, source_lang, target_lang)
                     if translation.get('success'):
@@ -348,13 +362,13 @@ class VoiceAssistant:
                     
             except Exception as e:
                 print(f"Error processing audio: {e}")
-                emit('error', {'message': f'Error processing audio: {e}'})
+                emit('error', {'message': f'Error processing audio: {str(e)}'})
         
         @self.socketio.on('text_message')
         def handle_text_message(data):
             """Handle text message"""
             text = data.get('text', '')
-            voice_type = data.get('voice_type', 'female')
+            voice_type = data.get('voiceType', 'female')
             translate_to = data.get('translate_to', None)
             
             if text:
@@ -588,7 +602,7 @@ class VoiceAssistant:
             self.app,
             host=CONFIG['host'],
             port=CONFIG['port'],
-            debug=CONFIG['debug'],
+            debug=False,
             allow_unsafe_werkzeug=True
         )
 
